@@ -1,4 +1,4 @@
-import Loader from "react-loader-spinner";
+import Loader from 'react-loader-spinner';
 export default class App extends React.Component {
   //other logic
   render() {

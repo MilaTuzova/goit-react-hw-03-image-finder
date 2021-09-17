@@ -29,34 +29,34 @@ export default class App extends Component {
 
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
-      
 
-     setTimeout(() => {
-      FetchImages(nextQuery, nextPage).then(respons => {
-        console.log(respons);
-        const { totalHits, hits } = respons;
+      setTimeout(() => {
+        FetchImages(nextQuery, nextPage).then(respons => {
+          // console.log(respons);
+          const { totalHits, hits } = respons;
 
-        if (nextPage === 1) {
-          this.setState({
-            images: [...hits],
-            totalHits,
-          });
-          console.log(totalHits);
-          console.log(hits);
-        } else {
-          this.setState({
-            images: [...prevImages, ...hits],
-            totalHits,
-            page: nextPage,
-          });
-        }
+          if (nextPage === 1) {
+            this.setState({
+              images: [...hits],
+              totalHits,
+              loading: false,
+            });
+            // console.log(totalHits);
+            // console.log(hits);
+          } else {
+            this.setState({
+              images: [...prevImages, ...hits],
+              totalHits,
+              page: nextPage,
+              loading: false,
+            });
+          }
 
-        if (totalHits === 0) {
-          Notiflix.Notify.failure('Please, enter your query!');
-        }
-      });
-     }, 500)
-
+          if (totalHits === 0) {
+            Notiflix.Notify.failure('Please, enter your query!');
+          }
+        });
+      }, 500);
     }
   }
 
@@ -87,9 +87,9 @@ export default class App extends Component {
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
-        {loading && images.length === 0 && (
-          <Loader />
-        )}
+       
+        {loading && <Loader />}
+
         {images.length > 0 && (
           <Button type="button" className="Button" onClickBtn={this.incrementPage} page={page} />
         )}
