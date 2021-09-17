@@ -15,7 +15,6 @@ export default class App extends Component {
     images: [],
     totalHits: 0,
     largeImageUrl: null,
-    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -35,9 +34,8 @@ export default class App extends Component {
             images: [...hits],
             totalHits,
           });
-
-          console.log(totalHits);
-          console.log(hits);
+          // console.log(totalHits);
+          // console.log(hits);
         } else {
           this.setState({
             images: [...prevImages, ...hits],
@@ -70,12 +68,11 @@ export default class App extends Component {
     const { images, largeImageUrl, searchQuery } = this.state;
 
     return (
-   
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
 
-        {largeImageUrl  && (
+        {largeImageUrl && (
           <Modal url={this.state.largeImageUrl} onCloseModal={this.toggleModal}>
             <img src={largeImageUrl} alt={searchQuery} />
           </Modal>
