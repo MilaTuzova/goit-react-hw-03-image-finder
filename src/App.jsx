@@ -7,6 +7,7 @@ import Notiflix from 'notiflix';
 import ImageGallery from 'Components/ImageGallery';
 import Modal from 'Components/Modal';
 import Button from 'Components/Button/Button';
+import Loader from 'react-loader-spinner';
 
 export default class App extends Component {
   state = {
@@ -22,13 +23,16 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.searchQuery;
     const nextQuery = this.state.searchQuery;
+    const prevPage = prevState.page;
     const nextPage = this.state.page;
     const prevImages = prevState.images;
 
-    if (prevQuery !== nextQuery) {
+    if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
+      
 
-      FetchImages(nextQuery).then(respons => {
+     setTimeout(() => {
+      FetchImages(nextQuery, nextPage).then(respons => {
         console.log(respons);
         const { totalHits, hits } = respons;
 
@@ -43,6 +47,7 @@ export default class App extends Component {
           this.setState({
             images: [...prevImages, ...hits],
             totalHits,
+            page: nextPage,
           });
         }
 
@@ -50,6 +55,8 @@ export default class App extends Component {
           Notiflix.Notify.failure('Please, enter your query!');
         }
       });
+     }, 500)
+
     }
   }
 
@@ -74,14 +81,17 @@ export default class App extends Component {
   };
 
   render() {
-    const { images, largeImageUrl, searchQuery } = this.state;
+    const { images, largeImageUrl, searchQuery, page, loading } = this.state;
 
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
+        {loading && images.length === 0 && (
+          <Loader />
+        )}
         {images.length > 0 && (
-          <Button type="button" className="Button" onClickBtn={this.incrementPage} />
+          <Button type="button" className="Button" onClickBtn={this.incrementPage} page={page} />
         )}
         {largeImageUrl && (
           <Modal url={this.state.largeImageUrl} onCloseModal={this.toggleModal}>
