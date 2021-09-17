@@ -6,6 +6,7 @@ import FetchImages from 'Components/services/Api';
 import Notiflix from 'notiflix';
 import ImageGallery from 'Components/ImageGallery';
 import Modal from 'Components/Modal';
+import Button from 'Components/Button/Button';
 
 export default class App extends Component {
   state = {
@@ -15,6 +16,7 @@ export default class App extends Component {
     images: [],
     totalHits: 0,
     largeImageUrl: null,
+    hits: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -27,6 +29,7 @@ export default class App extends Component {
       this.setState({ loading: true });
 
       FetchImages(nextQuery).then(respons => {
+        console.log(respons);
         const { totalHits, hits } = respons;
 
         if (nextPage === 1) {
@@ -34,8 +37,8 @@ export default class App extends Component {
             images: [...hits],
             totalHits,
           });
-          // console.log(totalHits);
-          // console.log(hits);
+          console.log(totalHits);
+          console.log(hits);
         } else {
           this.setState({
             images: [...prevImages, ...hits],
@@ -64,6 +67,12 @@ export default class App extends Component {
     }));
   };
 
+  incrementPage = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
   render() {
     const { images, largeImageUrl, searchQuery } = this.state;
 
@@ -71,7 +80,9 @@ export default class App extends Component {
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
-
+        {images.length > 0 && (
+          <Button type="button" className="Button" onClickBtn={this.incrementPage} />
+        )}
         {largeImageUrl && (
           <Modal url={this.state.largeImageUrl} onCloseModal={this.toggleModal}>
             <img src={largeImageUrl} alt={searchQuery} />
