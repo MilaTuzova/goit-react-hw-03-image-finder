@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 // import { ToastContainer } from 'react-toastify';
 // import { v4 as uuidv4 } from 'uuid';
-import Searchbar from 'Components/Searchbar/Searchbar';
+import Searchbar from 'Components/Searchbar';
 import FetchImages from 'Components/services/Api';
 import Notiflix from 'notiflix';
-import ImageGallery from 'Components/ImageGallery/ImageGallery';
+import ImageGallery from 'Components/ImageGallery';
 import Modal from 'Components/Modal';
 
 export default class App extends Component {
@@ -61,20 +61,25 @@ export default class App extends Component {
   };
 
   toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
+    this.setState(({ largeImageUrl }) => ({
+      largeImageUrl: !largeImageUrl,
     }));
   };
 
   render() {
-    const { images, showModal, largeImageUrl, searchQuery } = this.state;
+    const { images, largeImageUrl, searchQuery } = this.state;
 
     return (
+   
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
 
-        {largeImageUrl && <Modal url={this.state.largeImageUrl}><img src={largeImageUrl} alt={searchQuery} /></Modal>}
+        {largeImageUrl  && (
+          <Modal url={this.state.largeImageUrl} onCloseModal={this.toggleModal}>
+            <img src={largeImageUrl} alt={searchQuery} />
+          </Modal>
+        )}
       </div>
     );
   }
