@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 // import { ToastContainer } from 'react-toastify';
 // import { v4 as uuidv4 } from 'uuid';
 import Searchbar from 'Components/Searchbar/Searchbar';
-import { fetchImages } from 'Components/services/Api';
+import FetchImages from 'Components/services/Api';
 import Notiflix from 'notiflix';
 import ImageGallery from 'Components/ImageGallery/ImageGallery';
+import Modal from 'Components/Modal';
 
 export default class App extends Component {
   state = {
@@ -13,10 +14,8 @@ export default class App extends Component {
     loading: false,
     images: [],
     totalHits: 0,
-  };
-
-  handleFormSubmit = searchQuery => {
-    this.setState({ searchQuery, page: 1 });
+    largeImageUrl: null,
+    showModal: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -28,7 +27,7 @@ export default class App extends Component {
     if (prevQuery !== nextQuery) {
       this.setState({ loading: true });
 
-      fetchImages(nextQuery).then(respons => {
+      FetchImages(nextQuery).then(respons => {
         const { totalHits, hits } = respons;
 
         if (nextPage === 1) {
@@ -53,12 +52,29 @@ export default class App extends Component {
     }
   }
 
+  handleFormSubmit = searchQuery => {
+    this.setState({ searchQuery, page: 1 });
+  };
+
+  handleLargeImage = imgUrl => {
+    this.setState({ largeImageUrl: imgUrl });
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
   render() {
-    const { images } = this.state;
+    const { images, showModal, largeImageUrl, searchQuery } = this.state;
+
     return (
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery searchQuery={images} />
+        <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
+
+        {largeImageUrl && <Modal url={this.state.largeImageUrl}><img src={largeImageUrl} alt={searchQuery} /></Modal>}
       </div>
     );
   }
