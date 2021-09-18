@@ -9,6 +9,7 @@ import Modal from 'Components/Modal';
 import Button from 'Components/Button/Button';
 import Loader from 'react-loader-spinner';
 
+
 export default class App extends Component {
   state = {
     searchQuery: '',
@@ -56,7 +57,7 @@ export default class App extends Component {
             Notiflix.Notify.failure('Please, enter your query!');
           }
         });
-      }, 500);
+      }, 1000);
     }
   }
 
@@ -88,7 +89,7 @@ export default class App extends Component {
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
        
-        {loading && <Loader />}
+        {loading && <Loader type="Circles" color="#00BFFF" height={80} width={80} />}
 
         {images.length > 0 && (
           <Button type="button" className="Button" onClickBtn={this.incrementPage} page={page} />
