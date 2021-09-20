@@ -29,6 +29,7 @@ export default class App extends Component {
 
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
+       
       FetchImages(nextQuery, nextPage).then(respons => {
         // console.log(respons);
         const { totalHits, hits } = respons;
@@ -57,7 +58,7 @@ export default class App extends Component {
     }
   }
 
-  handleFormSubmit = searchQuery => {
+    handleFormSubmit = searchQuery => {
     this.setState({ searchQuery, page: 1 });
   };
 
