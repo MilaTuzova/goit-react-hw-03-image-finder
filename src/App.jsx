@@ -9,7 +9,6 @@ import Modal from 'Components/Modal';
 import Button from 'Components/Button/Button';
 import Loader from 'react-loader-spinner';
 
-
 export default class App extends Component {
   state = {
     searchQuery: '',
@@ -30,34 +29,31 @@ export default class App extends Component {
 
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
+      FetchImages(nextQuery, nextPage).then(respons => {
+        // console.log(respons);
+        const { totalHits, hits } = respons;
 
-      setTimeout(() => {
-        FetchImages(nextQuery, nextPage).then(respons => {
-          // console.log(respons);
-          const { totalHits, hits } = respons;
+        if (nextPage === 1) {
+          this.setState({
+            images: [...hits],
+            totalHits,
+            loading: false,
+          });
+          // console.log(totalHits);
+          // console.log(hits);
+        } else {
+          this.setState({
+            images: [...prevImages, ...hits],
+            totalHits,
+            page: nextPage,
+            loading: false,
+          });
+        }
 
-          if (nextPage === 1) {
-            this.setState({
-              images: [...hits],
-              totalHits,
-              loading: false,
-            });
-            // console.log(totalHits);
-            // console.log(hits);
-          } else {
-            this.setState({
-              images: [...prevImages, ...hits],
-              totalHits,
-              page: nextPage,
-              loading: false,
-            });
-          }
-
-          if (totalHits === 0) {
-            Notiflix.Notify.failure('Please, enter your query!');
-          }
-        });
-      }, 1000);
+        if (totalHits === 0) {
+          Notiflix.Notify.failure('Please, enter your query!');
+        }
+      });
     }
   }
 
@@ -88,7 +84,7 @@ export default class App extends Component {
       <div>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery searchQuery={images} onLargeImage={this.handleLargeImage} />
-       
+
         {loading && <Loader type="Circles" color="#00BFFF" height={80} width={80} />}
 
         {images.length > 0 && (

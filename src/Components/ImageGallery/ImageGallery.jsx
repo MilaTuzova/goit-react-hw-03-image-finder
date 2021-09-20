@@ -11,12 +11,13 @@ class ImageGallery extends Component {
       <div>
         <ul className="ImageGallery">
           {searchQuery.map(image => {
+            console.log(image);
+            console.log(image.largeImageURL);
+
+            const onSelectLargeImg = () => onLargeImage(image.largeImageURL);
+
             return (
-              <ImageGalleryItem
-                key={image.id}
-                image={image}
-                onClickImage={() => onLargeImage(image.largeImageURL)}
-              />
+              <ImageGalleryItem key={image.id} image={image} onClickImage={onSelectLargeImg} />
             );
           })}
         </ul>
