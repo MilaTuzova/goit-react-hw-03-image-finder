@@ -1,4 +1,4 @@
-function FetchImages(query, page) {
+export function fetchImages(query, page) {
   const BASE_URL = 'pixabay.com/api/';
   const KEY = '22661367-29e263943b27fbc7c6f830e79';
 
@@ -12,4 +12,4 @@ function FetchImages(query, page) {
   });
 }
 
-export default FetchImages;
+

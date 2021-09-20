@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { ToastContainer } from 'react-toastify';
 // import { v4 as uuidv4 } from 'uuid';
 import Searchbar from 'Components/Searchbar';
-import FetchImages from 'Components/services/Api';
+import {fetchImages} from 'Components/services/Api';
 import Notiflix from 'notiflix';
 import ImageGallery from 'Components/ImageGallery';
 import Modal from 'Components/Modal';
@@ -30,7 +30,7 @@ export default class App extends Component {
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
        
-      FetchImages(nextQuery, nextPage).then(respons => {
+     fetchImages(nextQuery, nextPage).then(respons => {
         // console.log(respons);
         const { totalHits, hits } = respons;
 
@@ -54,7 +54,7 @@ export default class App extends Component {
         if (totalHits === 0) {
           Notiflix.Notify.failure('Please, enter your query!');
         }
-      });
+      }).catch(error => console.log(error));
     }
   }
 
