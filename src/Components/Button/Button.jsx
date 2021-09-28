@@ -9,12 +9,12 @@ class Button extends Component {
   //   });
   // }
 
-  componentDidUpdate() {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    });
-  }
+  // componentDidUpdate() {
+  //   window.scrollTo({
+  //     top: document.documentElement.scrollHeight,
+  //     behavior: 'smooth',
+  //   });
+  // }
 
   render() {
     const { onClickBtn } = this.props;

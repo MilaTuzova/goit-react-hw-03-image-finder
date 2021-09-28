@@ -54,7 +54,17 @@ export default class App extends Component {
         if (totalHits === 0) {
           Notiflix.Notify.failure('Please, enter your query!');
         }
-      }).catch(error => console.log(error));
+      }).catch(error => console.log(error)).finally(() => {
+        
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        })
+      }
+       
+        
+      
+      );
     }
   }
 
