@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import { ToastContainer } from 'react-toastify';
 // import { v4 as uuidv4 } from 'uuid';
 import Searchbar from 'Components/Searchbar';
-import {fetchImages} from 'Components/services/Api';
+import { fetchImages } from 'Components/services/Api';
 import Notiflix from 'notiflix';
 import ImageGallery from 'Components/ImageGallery';
 import Modal from 'Components/Modal';
@@ -29,46 +29,44 @@ export default class App extends Component {
 
     if (prevQuery !== nextQuery || prevPage !== nextPage) {
       this.setState({ loading: true });
-       
-     fetchImages(nextQuery, nextPage).then(respons => {
-        // console.log(respons);
-        const { totalHits, hits } = respons;
 
-        if (nextPage === 1) {
-          this.setState({
-            images: [...hits],
-            totalHits,
-            loading: false,
-          });
-          // console.log(totalHits);
-          // console.log(hits);
-        } else {
-          this.setState({
-            images: [...prevImages, ...hits],
-            totalHits,
-            page: nextPage,
-            loading: false,
-          });
-        }
+      fetchImages(nextQuery, nextPage)
+        .then(respons => {
+          // console.log(respons);
+          const { totalHits, hits } = respons;
 
-        if (totalHits === 0) {
-          Notiflix.Notify.failure('Please, enter your query!');
-        }
-      }).catch(error => console.log(error)).finally(() => {
-        
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: 'smooth',
+          if (nextPage === 1) {
+            this.setState({
+              images: [...hits],
+              totalHits,
+              loading: false,
+            });
+            // console.log(totalHits);
+            // console.log(hits);
+          } else {
+            this.setState({
+              images: [...prevImages, ...hits],
+              totalHits,
+              page: nextPage,
+              loading: false,
+            });
+          }
+
+          if (totalHits === 0) {
+            Notiflix.Notify.failure('Please, enter your query!');
+          }
         })
-      }
-       
-        
-      
-      );
+        .catch(error => console.log(error))
+        .finally(() => {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth',
+          });
+        });
     }
   }
 
-    handleFormSubmit = searchQuery => {
+  handleFormSubmit = searchQuery => {
     this.setState({ searchQuery, page: 1 });
   };
 
